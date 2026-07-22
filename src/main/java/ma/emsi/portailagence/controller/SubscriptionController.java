@@ -30,4 +30,8 @@ public class SubscriptionController {
     public List<SubscriptionDTO> getClientSubscriptions(@PathVariable Long clientId) {
         return service.getByClient(clientId);
     }
+    @PutMapping("/{id}/cancel")
+    public SubscriptionDTO cancelSubscription(@PathVariable Long id) {
+        return service.cancelSubscription(id);
+    }
 }

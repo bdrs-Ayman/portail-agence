@@ -81,4 +81,15 @@ public class SubscriptionService {
                 .map(SubscriptionMapper::toDTO)
                 .collect(Collectors.toList());
     }
+    public SubscriptionDTO cancelSubscription(Long id) {
+
+        Subscription subscription = subscriptionRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Subscription not found"));
+
+        subscription.setStatus("CANCELLED");
+
+        return SubscriptionMapper.toDTO(
+                subscriptionRepository.save(subscription)
+        );
+    }
 }

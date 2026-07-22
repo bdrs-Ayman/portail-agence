@@ -35,4 +35,14 @@ public class ProductController {
     public void delete(@PathVariable Long id) {
         service.delete(id);
     }
+    @GetMapping("/active")
+    public List<ProductDTO> getActiveProducts() {
+        return service.getActiveProducts();
+    }
+    @PutMapping("/{id}")
+    public ProductDTO update(@PathVariable Long id,
+                             @RequestBody ProductDTO dto) {
+
+        return service.update(id, dto);
+    }
 }
