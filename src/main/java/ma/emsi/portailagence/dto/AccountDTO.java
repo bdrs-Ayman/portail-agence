@@ -4,6 +4,7 @@ import lombok.Data;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import ma.emsi.portailagence.entity.TypeCompte;
 
 @Data
 public class AccountDTO {
@@ -12,7 +13,7 @@ public class AccountDTO {
 
     private String numeroCompte;
 
-    private String typeCompte;
+    private TypeCompte typeCompte;
 
     private LocalDate dateOuverture;
 

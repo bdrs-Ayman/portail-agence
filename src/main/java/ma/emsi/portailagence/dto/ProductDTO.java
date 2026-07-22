@@ -1,5 +1,5 @@
 package ma.emsi.portailagence.dto;
-
+import ma.emsi.portailagence.entity.ProductType;
 import lombok.Data;
 
 @Data
@@ -11,7 +11,7 @@ public class ProductDTO {
 
     private String description;
 
-    private String type;
+    private ProductType type;
 
     private Double tauxInteret;
 

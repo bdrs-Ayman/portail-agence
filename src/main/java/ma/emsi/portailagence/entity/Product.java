@@ -22,8 +22,8 @@ public class Product {
     @Column(length = 1000)
     private String description;
 
-    @Column(nullable = false)
-    private String type;
+    @Enumerated(EnumType.STRING)
+    private ProductType type;
 
     private Double tauxInteret;
 

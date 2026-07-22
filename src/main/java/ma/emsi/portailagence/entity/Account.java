@@ -20,7 +20,8 @@ public class Account {
     @Column(unique = true)
     private String numeroCompte;
 
-    private String typeCompte;
+    @Enumerated(EnumType.STRING)
+    private TypeCompte typeCompte;
 
     private LocalDate dateOuverture;
 
