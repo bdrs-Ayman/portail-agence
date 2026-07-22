@@ -1,10 +1,13 @@
 package ma.emsi.portailagence.service;
 
+import ma.emsi.portailagence.dto.ClientDTO;
 import ma.emsi.portailagence.entity.Client;
+import ma.emsi.portailagence.mapper.ClientMapper;
 import ma.emsi.portailagence.repository.ClientRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ClientService {
@@ -15,53 +18,64 @@ public class ClientService {
         this.clientRepository = clientRepository;
     }
 
-    public List<Client> getAllClients() {
-        return clientRepository.findAll();
+    public List<ClientDTO> getAllClients() {
+        return clientRepository.findAll()
+                .stream()
+                .map(ClientMapper::toDTO)
+                .collect(Collectors.toList());
     }
 
-    public Client getClientById(Long id) {
-        return clientRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Client not found"));
+    public ClientDTO getClientById(Long id) {
+        return ClientMapper.toDTO(
+                clientRepository.findById(id)
+                        .orElseThrow(() -> new RuntimeException("Client not found"))
+        );
     }
 
-    public Client createClient(Client client) {
+    public ClientDTO createClient(ClientDTO dto) {
 
-        if (clientRepository.findByCin(client.getCin()).isPresent()) {
+        if (clientRepository.findByCin(dto.getCin()).isPresent()) {
             throw new RuntimeException("A client with this CIN already exists.");
         }
 
-        return clientRepository.save(client);
+        Client client = ClientMapper.toEntity(dto);
+
+        return ClientMapper.toDTO(clientRepository.save(client));
     }
 
-    public Client updateClient(Long id, Client client) {
+    public ClientDTO updateClient(Long id, ClientDTO dto) {
 
-        Client existing = getClientById(id);
+        Client existing = clientRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Client not found"));
 
-        existing.setNom(client.getNom());
-        existing.setPrenom(client.getPrenom());
-        existing.setCin(client.getCin());
-        existing.setDateNaissance(client.getDateNaissance());
-        existing.setTelephone(client.getTelephone());
-        existing.setEmail(client.getEmail());
-        existing.setAdresse(client.getAdresse());
-        existing.setVille(client.getVille());
-        existing.setProfession(client.getProfession());
-        existing.setStatut(client.getStatut());
+        existing.setNom(dto.getNom());
+        existing.setPrenom(dto.getPrenom());
+        existing.setCin(dto.getCin());
+        existing.setDateNaissance(dto.getDateNaissance());
+        existing.setTelephone(dto.getTelephone());
+        existing.setEmail(dto.getEmail());
+        existing.setAdresse(dto.getAdresse());
+        existing.setVille(dto.getVille());
+        existing.setProfession(dto.getProfession());
+        existing.setStatut(dto.getStatut());
 
-        return clientRepository.save(existing);
+        return ClientMapper.toDTO(clientRepository.save(existing));
     }
 
     public void deleteClient(Long id) {
         clientRepository.deleteById(id);
     }
 
-    public List<Client> searchClients(String keyword) {
+    public List<ClientDTO> searchClients(String keyword) {
         return clientRepository
                 .findByNomContainingIgnoreCaseOrPrenomContainingIgnoreCaseOrCinContainingIgnoreCaseOrTelephoneContainingIgnoreCase(
                         keyword,
                         keyword,
                         keyword,
                         keyword
-                );
+                )
+                .stream()
+                .map(ClientMapper::toDTO)
+                .collect(Collectors.toList());
     }
 }

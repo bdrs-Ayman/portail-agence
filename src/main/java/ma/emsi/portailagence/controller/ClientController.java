@@ -1,6 +1,6 @@
 package ma.emsi.portailagence.controller;
 
-import ma.emsi.portailagence.entity.Client;
+import ma.emsi.portailagence.dto.ClientDTO;
 import ma.emsi.portailagence.service.ClientService;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,31 +17,33 @@ public class ClientController {
     }
 
     @GetMapping
-    public List<Client> getAllClients() {
+    public List<ClientDTO> getAllClients() {
         return clientService.getAllClients();
     }
 
     @GetMapping("/{id}")
-    public Client getClient(@PathVariable Long id) {
+    public ClientDTO getClientById(@PathVariable Long id) {
         return clientService.getClientById(id);
     }
 
     @PostMapping
-    public Client createClient(@RequestBody Client client) {
+    public ClientDTO createClient(@RequestBody ClientDTO client) {
         return clientService.createClient(client);
     }
 
     @PutMapping("/{id}")
-    public Client updateClient(@PathVariable Long id,
-                               @RequestBody Client client) {
+    public ClientDTO updateClient(@PathVariable Long id,
+                                  @RequestBody ClientDTO client) {
         return clientService.updateClient(id, client);
     }
+
     @DeleteMapping("/{id}")
     public void deleteClient(@PathVariable Long id) {
         clientService.deleteClient(id);
     }
+
     @GetMapping("/search")
-    public List<Client> searchClients(@RequestParam String keyword) {
+    public List<ClientDTO> searchClients(@RequestParam String keyword) {
         return clientService.searchClients(keyword);
     }
 }

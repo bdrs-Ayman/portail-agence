@@ -1,11 +1,14 @@
 package ma.emsi.portailagence.service;
 
+import ma.emsi.portailagence.dto.SubscriptionDTO;
 import ma.emsi.portailagence.entity.*;
+import ma.emsi.portailagence.mapper.SubscriptionMapper;
 import ma.emsi.portailagence.repository.*;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class SubscriptionService {
@@ -27,10 +30,11 @@ public class SubscriptionService {
         this.accountRepository = accountRepository;
     }
 
-    public Subscription create(Long clientId,
-                               Long productId,
-                               Long accountId,
-                               Subscription subscription) {
+    public SubscriptionDTO create(Long clientId,
+                                  Long productId,
+                                  Long accountId,
+                                  SubscriptionDTO dto) {
+
         if (subscriptionRepository.existsByClientIdAndProductIdAndStatus(
                 clientId,
                 productId,
@@ -46,6 +50,8 @@ public class SubscriptionService {
 
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
+
+        Subscription subscription = SubscriptionMapper.toEntity(dto);
 
         subscription.setClient(client);
         subscription.setProduct(product);
@@ -63,10 +69,16 @@ public class SubscriptionService {
             subscription.setStatus("ACTIVE");
         }
 
-        return subscriptionRepository.save(subscription);
+        return SubscriptionMapper.toDTO(
+                subscriptionRepository.save(subscription)
+        );
     }
 
-    public List<Subscription> getByClient(Long clientId) {
-        return subscriptionRepository.findByClientId(clientId);
+    public List<SubscriptionDTO> getByClient(Long clientId) {
+
+        return subscriptionRepository.findByClientId(clientId)
+                .stream()
+                .map(SubscriptionMapper::toDTO)
+                .collect(Collectors.toList());
     }
 }

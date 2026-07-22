@@ -1,6 +1,6 @@
 package ma.emsi.portailagence.controller;
 
-import ma.emsi.portailagence.entity.Subscription;
+import ma.emsi.portailagence.dto.SubscriptionDTO;
 import ma.emsi.portailagence.service.SubscriptionService;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,17 +17,17 @@ public class SubscriptionController {
     }
 
     @PostMapping
-    public Subscription create(
+    public SubscriptionDTO create(
             @RequestParam Long clientId,
             @RequestParam Long productId,
             @RequestParam(required = false) Long accountId,
-            @RequestBody Subscription subscription) {
+            @RequestBody SubscriptionDTO dto) {
 
-        return service.create(clientId, productId, accountId, subscription);
+        return service.create(clientId, productId, accountId, dto);
     }
 
     @GetMapping("/client/{clientId}")
-    public List<Subscription> getClientSubscriptions(@PathVariable Long clientId) {
+    public List<SubscriptionDTO> getClientSubscriptions(@PathVariable Long clientId) {
         return service.getByClient(clientId);
     }
 }

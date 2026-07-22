@@ -1,10 +1,13 @@
 package ma.emsi.portailagence.service;
 
+import ma.emsi.portailagence.dto.ProductDTO;
 import ma.emsi.portailagence.entity.Product;
+import ma.emsi.portailagence.mapper.ProductMapper;
 import ma.emsi.portailagence.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductService {
@@ -15,17 +18,25 @@ public class ProductService {
         this.repository = repository;
     }
 
-    public List<Product> getAllProducts() {
-        return repository.findAll();
+    public List<ProductDTO> getAllProducts() {
+        return repository.findAll()
+                .stream()
+                .map(ProductMapper::toDTO)
+                .collect(Collectors.toList());
     }
 
-    public Product create(Product product) {
-        return repository.save(product);
+    public ProductDTO getById(Long id) {
+        return ProductMapper.toDTO(
+                repository.findById(id)
+                        .orElseThrow(() -> new RuntimeException("Product not found"))
+        );
     }
 
-    public Product getById(Long id) {
-        return repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Product not found"));
+    public ProductDTO create(ProductDTO dto) {
+
+        Product product = ProductMapper.toEntity(dto);
+
+        return ProductMapper.toDTO(repository.save(product));
     }
 
     public void delete(Long id) {

@@ -1,9 +1,11 @@
 package ma.emsi.portailagence.controller;
 
-import ma.emsi.portailagence.entity.Account;
+import ma.emsi.portailagence.dto.AccountDTO;
 import ma.emsi.portailagence.service.AccountService;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
+
 @RestController
 @RequestMapping("/api/accounts")
 public class AccountController {
@@ -15,18 +17,19 @@ public class AccountController {
     }
 
     @PostMapping("/client/{clientId}")
-    public Account createAccount(@PathVariable Long clientId,
-                                 @RequestBody Account account) {
+    public AccountDTO createAccount(@PathVariable Long clientId,
+                                    @RequestBody AccountDTO account) {
 
         return accountService.createAccount(clientId, account);
     }
+
     @GetMapping
-    public List<Account> getAllAccounts() {
+    public List<AccountDTO> getAllAccounts() {
         return accountService.getAllAccounts();
     }
 
     @GetMapping("/{id}")
-    public Account getAccount(@PathVariable Long id) {
+    public AccountDTO getAccount(@PathVariable Long id) {
         return accountService.getAccountById(id);
     }
 
@@ -34,5 +37,4 @@ public class AccountController {
     public void deleteAccount(@PathVariable Long id) {
         accountService.deleteAccount(id);
     }
-
 }
