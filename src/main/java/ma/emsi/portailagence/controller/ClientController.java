@@ -40,4 +40,8 @@ public class ClientController {
     public void deleteClient(@PathVariable Long id) {
         clientService.deleteClient(id);
     }
+    @GetMapping("/search")
+    public List<Client> searchClients(@RequestParam String keyword) {
+        return clientService.searchClients(keyword);
+    }
 }

@@ -54,4 +54,14 @@ public class ClientService {
     public void deleteClient(Long id) {
         clientRepository.deleteById(id);
     }
+
+    public List<Client> searchClients(String keyword) {
+        return clientRepository
+                .findByNomContainingIgnoreCaseOrPrenomContainingIgnoreCaseOrCinContainingIgnoreCaseOrTelephoneContainingIgnoreCase(
+                        keyword,
+                        keyword,
+                        keyword,
+                        keyword
+                );
+    }
 }
