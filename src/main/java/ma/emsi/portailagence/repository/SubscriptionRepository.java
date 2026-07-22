@@ -9,4 +9,7 @@ public interface SubscriptionRepository extends JpaRepository<Subscription, Long
 
     List<Subscription> findByClientId(Long clientId);
 
+    boolean existsByClientIdAndProductIdAndStatus(Long clientId,
+                                                  Long productId,
+                                                  String status);
 }

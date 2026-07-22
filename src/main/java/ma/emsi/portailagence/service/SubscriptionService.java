@@ -31,6 +31,15 @@ public class SubscriptionService {
                                Long productId,
                                Long accountId,
                                Subscription subscription) {
+        if (subscriptionRepository.existsByClientIdAndProductIdAndStatus(
+                clientId,
+                productId,
+                "ACTIVE")) {
+
+            throw new RuntimeException(
+                    "Client already has an active subscription to this product."
+            );
+        }
 
         Client client = clientRepository.findById(clientId)
                 .orElseThrow(() -> new RuntimeException("Client not found"));
